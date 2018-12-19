@@ -17,7 +17,7 @@ for Key, value in lotto_data.items():
         real_numbers.append(value)
 
 real_numbers.sort()
-bonus)number = lotto_data['drwtNo']
+bonus_number = lotto_data['drwtNo']
 print(real_numbers)
 
 
