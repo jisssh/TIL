@@ -60,5 +60,5 @@ def am_i_lucky(pick, draw):
     else:
         return('꽝')
 
-# result = am_i_lucky(pick_lotto(),get_lotto(833))
-# print(result)
+result = am_i_lucky(pick_lotto(),get_lotto(833))
+print(result)
