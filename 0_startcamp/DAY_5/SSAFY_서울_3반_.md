@@ -1,6 +1,6 @@
 # SSAFY Start Camp 챗봇 퀘스트
 
-서울_3_지상현, https://github.com/jisssh
+서울_3_지상현, https://github.com/jisssh/TIL/blob/master/0_startcamp/DAY_5
 
 ## I. 스펙(Specification)
 
