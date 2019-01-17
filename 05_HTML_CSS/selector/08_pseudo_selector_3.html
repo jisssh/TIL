@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    /* 가상 요소 셀렉터 pseudo element selector */
+        /* p 의 첫 글자 */
+        p::first-letter {font-size: 3em}
+        /* p 의 첫 줄 */
+        p::first-line {color: indianred;}
+        /* h1 요소의 앞에 */
+        h1::before{
+            content: "HTML5!!";
+            color: lightskyblue;
+        }
+        /* h1 요소의 뒤에 */
+        h1::after{
+            content: " !!CSS3";
+            color: lightsalmon
+        }
+        /* 드래그 */
+        ::selection{
+            color: maroon;
+            background: palegoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <h1>This is Heading</h1>
+    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+</body>
+</html>
