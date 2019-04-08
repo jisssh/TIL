@@ -1,0 +1,13 @@
+{% extends 'practice/base.html' %}
+
+{% block body %}
+    <h1>Article List</h1>
+    <a href="/practice/practice/new"><button>New Article</button></a>
+    <ul>
+        {% for article in articles %}
+            <li>
+                <a href="/practice/practice/{{ article.id }}">{{ article.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

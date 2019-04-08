@@ -3,48 +3,48 @@ from .models import Article
 # Create your views here.
 
 
-# id 불필요
-def article_new(request):
-    return render(request, 'board/new.html')
+def practice_new(request):
+    return render(request, 'practice/new.html')
 
 
-def article_create(request):
+def practice_create(request):
     article = Article()
     article.title = request.POST.get('input_title')
     article.content = request.POST.get('input_content')
     article.save()
-    return redirect(f'/board/articles/{article.id}')
+    return redirect(f'/practice/practice/{article.id}')
 
 
-def article_list(request):
+def practice_list(request):
     articles = Article.objects.all()
-    return render(request, 'board/list.html', {
+    return render(request, 'practice/list.html',{
         'articles': articles
     })
 
-# id 필요
-def article_detail(request, id):
+
+def practice_detail(request, id):
     article = Article.objects.get(id=id)
-    return render(request, 'board/detail.html', {
+    return render(request, 'practice/detail.html', {
         'article': article
     })
 
-def article_edit(request, id):
+
+def practice_edit(request, id):
     article = Article.objects.get(id=id)
-    return render(request, 'board/edit.html', {
-        'article': article,
+    return render(request, 'practice/edit.html', {
+        'article': article
     })
 
 
-def article_update(request, id):
+def practice_update(request, id):
     article = Article.objects.get(id=id)
     article.title = request.POST.get('input_title')
     article.content = request.POST.get('input_content')
     article.save()
-    return redirect(f'/board/articles/{article.id}')
+    return redirect(f'/practice/practice/{article.id}')
 
 
-def article_delete(request, id):
+def practice_delete(request, id):
     article = Article.objects.get(id=id)
     article.delete()
-    return redirect('/board/articles/')
+    return redirect('/practice/practice/')

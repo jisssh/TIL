@@ -1,0 +1,15 @@
+{% extends 'practice/base.html'%}
+
+{% block body %}
+    <h1>{{ article.title }}</h1>
+    <p>
+        {{ article.content }}
+    </p>
+    <hr>
+    <a href="/practice/practice/"><button>LIST</button></a>
+    <a href="/practice/practice/{{ article.id }}/edit/"><button>EDIT</button></a>
+    <form action="/practice/practice/{{ article.id }}/delete/" method="post">
+    {% csrf_token %}
+        <button type="submit">DELETE</button>
+    </form>
+{% endblock %}

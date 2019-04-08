@@ -10,20 +10,20 @@ urlpatterns = [
     # /articles/new => html # 새로 작성하는 화면
     path('articles/new/', views.article_new),
     # /articles/create => DB에 new record 작성
-    path('article/create/', views.article_create),
+    path('articles/create/', views.article_create),
     # Read
     # /articles => html (all articles)
-    path('article/', views.article_list),
+    path('articles/', views.article_list),
     # /articles => html (article id 1)
-    path('article/<int:id>/', views.article_detail),
+    path('articles/<int:id>/', views.article_detail),
 
     # Update
     # /articles/1/edit => html (article id  = 1수정하는 화면)
-    path('article/<int:id>/edit/', views.article_edit),
+    path('articles/<int:id>/edit/', views.article_edit),
     # /articles/1/update => DB update article id = 1
-    path('article/<int:id>/update/', views.article_update),
+    path('articles/<int:id>/update/', views.article_update),
 
     # Delete
     # /articles/1/delete => DB delete article id = 1
-    path('article/<int:id>/delete/', views.article_delete),
+    path('articles/<int:id>/delete/', views.article_delete),
 ]

@@ -1,7 +1,6 @@
-{% extends 'board/base.html' %}
-
+{% extends 'practice/base.html' %}
 {% block body %}
-    <form action="/board/articles/create/" method="post">
+    <form action="/practice/practice/create/" method="post">
     {% csrf_token %}
         <input name="input_title" type="text">
         <textarea name="input_content" id="" cols="30" rows="10"></textarea>
