@@ -1,15 +1,48 @@
-{% extends 'practice/base.html'%}
+{% extends 'practice/base.html' %}
 
 {% block body %}
-    <h1>{{ article.title }}</h1>
+    <h1>{{ posting.title }}</h1>
     <p>
-        {{ article.content }}
+        {{ posting.content }}
     </p>
     <hr>
-    <a href="/practice/"><button>LIST</button></a>
-    <a href="/practice/{{ article.id }}/edit/"><button>EDIT</button></a>
-    <form action="/practice/practice/{{ article.id }}/delete/" method="post">
-    {% csrf_token %}
-        <button type="submit">DELETE</button>
+    <a href="{% url 'board_ad:posting_list' %}">
+        <button>LIST</button>
+    </a>
+    <a href="{% url 'board_ad:posting_update' posting.id %}">
+        <button>EDIT</button>
+    </a>
+    <form action="{% url 'board_ad:posting_delete' posting.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('진짜 지울거야..?');">DELETE</button>
     </form>
+    <button id="reset_button">WOW</button>
+    <script>
+        button = document.querySelector('#reset_button');
+        button.addEventListener('click', (e) => {
+            document.write('<h1>🥳🥳</h1>');
+        });
+    </script>
+    <hr>
+    <form action="{% url 'board_ad:comment_create' posting.id %}" method="post">
+        {% csrf_token %}
+        <label for="comment"></label>
+        <input type="text" name="comment" id="comment">
+        {#        <input type="submit" value="댓글쓰기">#}
+        <button type="submit">댓글쓰기</button>
+    </form>
+
+    {% if posting.comment_set %}
+        <ul>
+            {% for comment in comments %}
+                <form style="display: inline-block" action="{% url 'board_ad:comment_delete' posting.id comment.id %}"
+                      method="POST">
+                    {% csrf_token %}
+                    <li>{{ comment.content }} ({{ comment.created_at }})</li>
+                    <button type="submit" onclick="return confirm('진짜 지울거야..?🥺');">댓글삭제</button>
+                    <hr>
+                </form>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

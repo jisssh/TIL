@@ -1,13 +1,15 @@
 {% extends 'practice/base.html' %}
 
 {% block body %}
-    <h1>Article List</h1>
-    <a href="/practice/practice/new"><button>New Article</button></a>
+    <h1>Posting List</h1>
+    <a href="{% url 'board_ad:posting_create' %}"><button>New Posting</button></a>
+    {% if postings %}
     <ul>
-        {% for article in articles %}
+        {% for posting in postings %}
             <li>
-                <a href="/practice/practice/{{ article.id }}">{{ article.title }}</a>
+                <a href="{% url 'board_ad:posting_detail' posting.id %}">{{ posting.title }}</a>
             </li>
         {% endfor %}
     </ul>
+    {% endif %}
 {% endblock %}
