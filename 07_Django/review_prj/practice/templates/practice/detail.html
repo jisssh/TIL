@@ -6,8 +6,8 @@
         {{ article.content }}
     </p>
     <hr>
-    <a href="/practice/practice/"><button>LIST</button></a>
-    <a href="/practice/practice/{{ article.id }}/edit/"><button>EDIT</button></a>
+    <a href="/practice/"><button>LIST</button></a>
+    <a href="/practice/{{ article.id }}/edit/"><button>EDIT</button></a>
     <form action="/practice/practice/{{ article.id }}/delete/" method="post">
     {% csrf_token %}
         <button type="submit">DELETE</button>
