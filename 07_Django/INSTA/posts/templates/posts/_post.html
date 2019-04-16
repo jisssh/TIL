@@ -1,0 +1,63 @@
+{#<article class="card my-3">#}
+{#    {% if post.image_set %}#}
+{#        <div id="post{{ post.id }}" class="carousel slide carousel-fade" data-ride="carousel">#}
+{#            <div class="carousel-inner">#}
+{#                {% for image in post.image_set.all %}#}
+{#                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">#}
+{#                        <img src="{{ image.file.url }}" alt="{{ image.file }}">#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{##}
+{#            </div>#}
+{#        </div>#}
+{#        <img src="{{ post.image.url }}" class="card-img-top mb-5" alt="{{ post.image }}">#}
+{#    {% else %}#}
+{#        <img src="http://picsum.photos/600/?random" class="card-img-top" alt="random-image">#}
+{#    {% endif %}#}
+{#    <div class="card-body bg-light pb-4">#}
+{#        <center><p class="card-text mb-3">{{ post.content }} </p></center>#}
+{#        <form action="{% url 'posts:delete_post' post.id %}" method="post">#}
+{#        {% csrf_token %}#}
+{##}
+{#            <button type="submit" class="fa fa-trash bg-light border-0 float-right" aria-hidden="true" onclick="return confirm('진짜 지울거야..?');"></button>#}
+{#             <a href="" type="submit" class="text-muted" onclick="return confirm('진짜 지울거야..?');"><i class="fa fa-trash" aria-hidden="true"></i></a>#}
+{#            <br>#}
+{##}
+{#    </form>#}
+{##}
+{#    </div>#}
+{#</article>#}
+<div class="card my-3">
+    {% if post.image_set %}
+        <div id="post{{post.id}}" class="carousel slide carousel-fade" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for image in post.image_set.all %}
+                    <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+                        <img src="{{ image.file.url }}" class="d-block w-100" alt="{{ image.file }}">
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#post{{post.id}}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#post{{post.id}}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    {% else %}
+        <img src="http://picsum.photos/600/?random" alt="random-image" class="card-img-top" />
+    {% endif %}
+    <div class="card-body">
+        <p class="card-text mb-3"><b>jisssh</b>  {{ post.content }} </p>
+        <form action="{% url 'posts:delete_post' post.id %}" method="post">
+        {% csrf_token %}
+            <button type="submit" class="fa fa-trash bg-light border-0 float-right" aria-hidden="true" onclick="return confirm('진짜 지울거야..?');"></button>
+        <a href="{% url 'posts:update_post' post.id %}" class="far fa-edit text-dark float-right"></a>
+            <br>
+
+        </form>
+
+    </div>
+</div>
