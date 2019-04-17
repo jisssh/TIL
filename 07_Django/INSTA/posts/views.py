@@ -20,7 +20,9 @@ def create_post(request):
         # post.image = request.FILES.get('image')
         if post_form.is_valid():  # Data 검증을 한다.
             # 통과하면 저장한다.
-            post = post_form.save()
+            post = post_form.save(commit=False)
+            post.uploader = request.uploader
+            post.save()
             for image in request.FILES.getlist('file'):
                 request.FILES['file'] = image
                 image_form = ImageModelForm(files=request.FILES)
