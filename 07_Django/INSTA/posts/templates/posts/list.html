@@ -2,12 +2,16 @@
 
 {% block body %}
     <br>
-    <center><h2>🌊🌊🌊 Jiss Record 🌊🌊🌊</h2></center>
+    <h2 class="text-center">🌊🌊🌊 Jisstagram 🌊🌊🌊</h2>
     <br>
     <br>
-    <section class="card-columns">
+    <div class="container">
+    <section class="card-columns row">
         {% for post in posts %}
-            {% include 'posts/_post.html' with post=post %}
+            <div class="col-md-4">
+            {% include 'posts/_post.html' with post=post comment_form=comment_form %}
+            </div>
         {% endfor %}
     </section>
+    </div>
 {% endblock %}

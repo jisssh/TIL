@@ -32,4 +32,11 @@ class Image(TimeStampedModel):
         upload_to='posts/images',
         processors=[ResizeToFill(600, 600)],
         format='JPEG',
-        options={'quality': 90})  # pip install Pillow
+        options={'quality': 90}  # pip install Pillow
+    )
+
+
+class Comment(models.Model):
+    content = models.CharField(max_length=100)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    commenter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

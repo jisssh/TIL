@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from django.contrib.auth.decorators import login_required
 from .models import Post, Image
-from .forms import PostModelForm, ImageModelForm
+from .forms import PostModelForm, ImageModelForm, CommentModelForm
 
 
 @login_required()
@@ -21,7 +21,7 @@ def create_post(request):
         if post_form.is_valid():  # Data 검증을 한다.
             # 통과하면 저장한다.
             post = post_form.save(commit=False)
-            post.uploader = request.uploader
+            post.uploader = request.user
             post.save()
             for image in request.FILES.getlist('file'):
                 request.FILES['file'] = image
@@ -50,34 +50,66 @@ def create_post(request):
 @login_required()
 @require_http_methods(['GET', 'POST'])
 def update_post(request, post_id):
-    post_form = get_object_or_404(Post, id=post_id)
-    if request.method == 'POST':
-        post_form = PostModelForm(request.POST, instance=post_form)
-        if post_form.is_valid():
-            post_form.save()
-            return redirect('posts:post_list')
+    post = get_object_or_404(Post, id=post_id)
+    # 지금 수정하려는 post 작성자가 요청보낸 사람이냐?
+    if post.uploader == request.user:
+        if request.method == 'POST':
+            post_form = PostModelForm(request.POST, instance=post)
+            if post_form.is_valid():
+                post_form.save()
+                return redirect('posts:post_list')
         else:
-            pass
-    else:
-        form = PostModelForm(instance=post_form)
+            post_form = PostModelForm(instance=post)
         return render(request, 'posts/form.html', {
             'post_form': post_form,
         })
+    # 작성자와 요청 보낸 user 가 다르다면,
+    else:
+        # 403 : Forbidden 금지됨!
+        return redirect('posts:post_list')
 
 
 @login_required()
 @require_http_methods(['GET', 'POST'])
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    post.delete()
+    if post.uploader == request.user:
+        post.delete()
     return redirect('posts:post_list')
 
 
 @require_GET
 def post_list(request):
     posts = Post.objects.all()
+    comment_form = CommentModelForm()
     return render(request, 'posts/list.html', {
         'posts': posts,
+        'comment_form': comment_form,
     })
 
 
+@login_required
+@require_POST
+def creat_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    form = CommentModelForm(data=request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.commenter = request.user
+        comment.post = post
+        comment.save()
+        return redirect('posts:post_list')
+    # Todo: else => comment 가 유효하지 않다면 어떻게 하지?
+
+# @login_required
+# @require_POST
+# def create_comment(request, post_id):
+#     post = get_object_or_404(Post, id=post_id)
+#     comment_form = CommentModelFrom(data=request.POST)
+#     if comment_form.is_valid():
+#         comment = comment_form.save(commit=False)
+#         comment.user = request.user
+#         comment.post = post
+#         comment.save()
+#         return redirect('posts:post_list')
+#     # TODO: else: => if comment is not valid, then what?```
