@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from django.contrib.auth.decorators import login_required
-from .models import Post, Image
+from django.contrib import messages
+from .models import Post, Image, Comment, HashTag
 from .forms import PostModelForm, ImageModelForm, CommentModelForm
 
 
@@ -23,6 +24,18 @@ def create_post(request):
             post = post_form.save(commit=False)
             post.uploader = request.user
             post.save()
+
+            # create HashTag => <input name-'tags' /> #hi #ssafy #20층
+            content = post_form.cleaned_data.get('content')
+            words = content.split(' ')  # 띄어쓰기 기준으로 split 한다.
+            for word in words:
+                if word[0] == '#':
+                    word = word[1:]
+                    tag = HashTag.objects.get_or_create(content=word)   # (HashTagObj, True / False)
+                    post.tags.add(tag[0])
+                    if tag[1]:  # 태그가 처음 만들어진거라면, 메세지 추가!
+                        messages.add_message(request, messages.SUCCESS, f'{tag[0].content} 태그를 처음으로 추가하셨어요!ღ')
+
             for image in request.FILES.getlist('file'):
                 request.FILES['file'] = image
                 image_form = ImageModelForm(files=request.FILES)
@@ -57,6 +70,18 @@ def update_post(request, post_id):
             post_form = PostModelForm(request.POST, instance=post)
             if post_form.is_valid():
                 post_form.save()
+                # update HashTag
+                post.tags.clear()   # 기존의 태그 다 날리기
+                content = post_form.cleaned_data.get('content')
+                words = content.split(' ')  # 띄어쓰기 기준으로 split 한다.
+                for word in words:
+                    if word[0] == '#':
+                        word = word[1:]
+                        tag = HashTag.objects.get_or_create(content=word)  # (HashTagObj, True / False)
+                        post.tags.add(tag[0])
+                        if tag[1]:  # 태그가 처음 만들어진거라면, 메세지 추가!
+                            messages.add_message(request, messages.SUCCESS, f'{tag[0].content} 태그를 처음으로 추가하셨어요!ღ')
+
                 return redirect('posts:post_list')
         else:
             post_form = PostModelForm(instance=post)
@@ -98,18 +123,43 @@ def creat_comment(request, post_id):
         comment.commenter = request.user
         comment.post = post
         comment.save()
-        return redirect('posts:post_list')
+        # return redirect('posts:post_list')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/insta/'))
     # Todo: else => comment 가 유효하지 않다면 어떻게 하지?
 
-# @login_required
-# @require_POST
-# def create_comment(request, post_id):
-#     post = get_object_or_404(Post, id=post_id)
-#     comment_form = CommentModelFrom(data=request.POST)
-#     if comment_form.is_valid():
-#         comment = comment_form.save(commit=False)
-#         comment.user = request.user
-#         comment.post = post
-#         comment.save()
-#         return redirect('posts:post_list')
-#     # TODO: else: => if comment is not valid, then what?```
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def delete_comment(request, post_id, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if comment.commenter == request.user:
+        comment.delete()
+    return redirect('posts:post_list')
+
+
+@login_required()
+@require_POST
+def toggle_like(request, post_id):
+    user = request.user
+    post = get_object_or_404(Post, id=post_id)
+    # if post.likes.filter(id=user.id).exist():   # 찾으면, [value] / 없으면, []
+    #     post.likes.remove(user)
+    # 위 아래 같은 코드임 !
+    if user in post.likes.all():
+        post.likes.remove(user)
+    else:
+        post.likes.add(user)
+    return redirect('posts:post_list')
+
+
+@require_GET
+def tag_posts_list(request, tag_name):
+    tag = get_object_or_404(HashTag, content=tag_name)
+    posts = tag.posts.all()
+    comment_form = CommentModelForm()
+    return render(request, 'posts/list.html', {
+        'posts': posts,
+        'comment_form': comment_form,
+        'h1': f'#{tag} 를 포함한 posts 입니다.'
+    })

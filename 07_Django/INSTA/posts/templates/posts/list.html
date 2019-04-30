@@ -2,9 +2,12 @@
 
 {% block body %}
     <br>
-    <h2 class="text-center">🌊🌊🌊 Jisstagram 🌊🌊🌊</h2>
+    <h2 class="text-center engft"><i style="color: #9c3328" class="fab fa-instagram"></i> Jisstagram</h2>
     <br>
     <br>
+    {% if h1 %}
+    <h2>{{ h1 }}</h2>
+    {% endif %}
     <div class="container">
     <section class="card-columns row">
         {% for post in posts %}

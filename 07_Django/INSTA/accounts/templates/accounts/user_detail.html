@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="row ft">
+        <div class="col-4">
+            <img src="..." alt="{{ user_info.username }}-profile-picture">
+        </div>
+        <div class="col-8 ft">
+            <h1>{{ user_info.username }}</h1>
+            <div>
+                <h2>followings - 내가 따르는 사람들</h2>
+            {{ user_info.followings.all.count }}
+                {% if user_info.followings.all %}
+                    <ul>
+                        {% for user in user_info.followings.all %}
+                            <li>{{ user.username }}</li>
+                        {% endfor %}
+
+                    </ul>
+                {% endif %}
+                <h2>followers - 나를 따르는 사람들</h2>
+            {{ user_info.followers.all.count }}
+                {% if user_info.followers.all %}
+                    <ul>
+                        {% for user in user_info.followers.all %}
+                            <li>{{ user.username }}</li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% endif %}
+            </div>
+            <div>
+                {#                 TODO: follow button, posts count, follower count,  자기소개 #}
+                {% if user != user_info %}
+                    <form action="{% url 'accounts:toggle_follow' user_info.username %}" method="post">
+                    {% csrf_token %}
+                    {% if user_info in user.followings.all %}
+                        <button class="btn btn-danger"> unfollow</button>
+
+                    {% else %}
+                        <button class="btn btn-danger">follow</button>
+                    {% endif %}
+
+
+                {% endif %}
+
+                </form>
+
+            </div>
+        </div>
+        <div class="card-columns">
+            {% for post in user_info.post_set.all %}
+                {% include 'posts/_post.html' with post=post comment_form=comment_form %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,3 +1,18 @@
-/*.ft {*/
-    /*color: #ffa04e;*/
-/*}*/
+.ft {
+    /*font-family: 'Noto Serif KR', serif;*/
+    /*font-family: 'Sunflower', sans-serif;*/
+    font-family: 'Gaegu', cursive;
+    font-size: 20px;
+}
+.engft {
+    /*font-family: 'Roboto Slab', serif;*/
+    /*font-family: 'Ubuntu', sans-serif;*/
+    /*font-family: 'Roboto Mono', monospace;*/
+    /*font-family: 'Inconsolata', monospace;*/
+    /*font-family: 'Dosis', sans-serif;*/
+    /*font-family: 'Pacifico', cursive;*/
+    font-family: 'Source Code Pro', monospace;
+}
+.icon {
+    color: #843534;
+}
